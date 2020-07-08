@@ -70,8 +70,6 @@ typedef struct s_process {
 }              t_process;
 
 #define MX_OK 00
-int mx_fprintf_fg(char **args);
-t_list *mx_get_process_by_cmd(char *arg, t_list *processes);
 char **mx_check_exec(char **text, t_ush data, char ***env);
 char *read_speed(char *name);
 void signal_handler(int signo);
@@ -152,5 +150,9 @@ char **getslesh(char *n);
 void mx_set_input_mode(void);
 void mx_unset_input_mode(void);
 void mx_kill_all_proc(void);
+bool mx_check_brackets(char *c);
+bool mx_check_quotes(char *input);
+void mx_skip_expansion(char *input, unsigned int *i);
+t_list *mx_find_process(char *args);
 
 #endif

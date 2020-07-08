@@ -1,27 +1,22 @@
 #include "ush.h"
 
-static int mx_arr_size(char **arr);
+static int arr_size(char **arr);
 static void check_status(t_list **processes);
+static void show_susp_list(t_list **processes, int fd);
 
 int mx_jobs(char **args, int fd) {
     t_list **processes = mx_get_plist();
-    t_process *tmp = NULL;
 
-    if (mx_arr_size(args) > 0) {
+    if (arr_size(args) > 0) {
         fprintf(stderr, "jobs: too many arguments\n");
         return 1;
     }
     check_status(processes);
-    for (t_list *cur = *processes; cur; cur = cur->next) {
-        tmp = (t_process*)cur->data;
-        dprintf(fd, "[%d]    ", tmp->pos);
-        dprintf(fd, "suspended  ");
-        dprintf(fd, "%s\n", tmp->commands);
-    }
+    show_susp_list(processes, fd);
     return 1;
 }
 
-static int mx_arr_size(char **arr) {
+static int arr_size(char **arr) {
     int result = 0;
 
     while (*arr) {
@@ -41,5 +36,16 @@ static void check_status(t_list **processes) {
         if (!MX_WIFSTOPPED(tmp->status) || ret_pid == -1) {
             mx_del_node_list(processes, &tmp);
         }
+    }
+}
+
+static void show_susp_list(t_list **processes, int fd) {
+    t_process *tmp = NULL;
+
+    for (t_list *cur = *processes; cur; cur = cur->next) {
+        tmp = (t_process*)cur->data;
+        dprintf(fd, "[%d]    ", tmp->pos);
+        dprintf(fd, "suspended  ");
+        dprintf(fd, "%s\n", tmp->commands);
     }
 }

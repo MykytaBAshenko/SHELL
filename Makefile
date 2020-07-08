@@ -40,7 +40,8 @@ SRC = builint_run.c \
 		list_input.c \
 		mx_cont_proc.c \
 		proc_list_func.c \
-		dop_fg.c \
+		input_on_speeed2.c \
+		mx_find_proc.c \
 
 INCLUDE = -I $(LBMXD) \
 	-I $(INCD) \
